@@ -54,3 +54,44 @@ The response will be a JSON object with the following structure:
   }
 }
 ```
+
+## User Login Endpoint
+
+**Method:** `POST`
+
+### Description
+
+This endpoint allows existing users to log in by providing their email and password. If the credentials are valid, the user receives an authentication token.
+
+### Request Body
+
+The request body should be a JSON object with the following structure:
+
+- **email**: _String_, required, must be a valid email address.
+- **password**: _String_, required, minimum 6 characters.
+
+**Example:**
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "securePassword123"
+}
+```
+
+### Response
+
+The response will be a JSON object with the following structure:
+
+- **status**: _String_, indicates the success or failure of the login attempt.
+- **message**: _String_, provides additional information about the login status.
+- **token**: _String_, the authentication token if login is successful.
+
+**Example:**
+
+```json
+{
+  "status": "success",
+  "message": "Login successful",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```

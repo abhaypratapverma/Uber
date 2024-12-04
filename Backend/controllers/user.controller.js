@@ -3,7 +3,6 @@ const userModel = require("../models/user.model");
 const userService = require("../services/user.service");
 
 module.exports.registerUser = async (req, res, next) => {
-  try {
     // Validate input
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -14,19 +13,21 @@ module.exports.registerUser = async (req, res, next) => {
     const { fullname, email, password } = req.body;
 
     // Ensure `fullname` contains `firstname` and `lastname`
-    if (!fullname || !fullname.firstname || !fullname.lastname) {
-      return res.status(400).json({ error: "Full name must include first and last names." });
+    const isUserAlready = await userModel.findOne({ email });
+
+    if (isUserAlready) {
+        return res.status(400).json({ message: 'User already exist' });
     }
 
     // Hash password
-    const hashPassword = await userModel.hashPassword(password);
+    const hashedPassword = await userModel.hashPassword(password);
 
     // Create user object
     const user = await userService.createUser({
       firstname: fullname.firstname,
       lastname: fullname.lastname,
       email,
-      password: hashPassword,
+      password: hashedPassword,
     });
 
     // Generate auth token
@@ -34,9 +35,41 @@ module.exports.registerUser = async (req, res, next) => {
 
     // Respond with user data and token
     res.status(201).json({ user, token });
-  } catch (error) {
-    // Handle unexpected errors
-    console.error("Error in registerUser:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
+  
 };
+
+module.exports.loginUser = async (req, res, next) => {
+  
+    // Validate input
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    // Destructure input
+    const { email, password } = req.body;
+
+    // Find user by email
+    const user = await userModel.findOne({email}).select('+password');
+
+    // Ensure user exists
+    if (!user) {
+      return res.status(401).json({ error: "Invalid email or password" });
+    }
+
+    // Compare password
+    const isMatch = await user.comparePassword(password);
+
+    // Ensure password matches
+    if (!isMatch) {
+      return res.status(401).json({ error: "Invalid email or password" });
+    }
+
+    // Generate auth token
+    const token = user.generateAuthToken();
+
+    // Respond with user data and token
+    res.status(200).json({ user, token });
+  
+  }
+
