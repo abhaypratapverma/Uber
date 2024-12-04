@@ -95,3 +95,55 @@ The response will be a JSON object with the following structure:
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
+
+## User Profile Endpoint
+
+**Method:** `GET`
+
+### Description
+
+This endpoint allows authenticated users to retrieve their profile information.
+
+### Headers
+
+- **Authorization**: _String_, required, Bearer token obtained after login.
+
+### Response
+
+The response will be a JSON object containing the user's profile details.
+
+**Example:**
+```json
+{
+  "id": "12345",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com"
+}
+```
+
+## User Logout Endpoint
+
+**Method:** `POST`
+
+### Description
+
+This endpoint allows authenticated users to log out by invalidating their authentication token.
+
+### Headers
+
+- **Authorization**: _String_, required, Bearer token obtained after login.
+
+### Response
+
+The response will be a JSON object indicating the success or failure of the logout attempt.
+
+**Example:**
+```json
+{
+  "status": "success",
+  "message": "Logout successful"
+}
+```
