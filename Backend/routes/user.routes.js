@@ -16,16 +16,22 @@ router.post(
   ],
   userController.registerUser
 );
-router.post('/login',[
-  body('email').isEmail().withMessage('Invalid email'),
-  body('password').isLength({min:6}).withMessage('Password must be at least 6 characters')
-],userController.loginUser
+
+router.post(
+  "/login",
+  [
+    body("email").isEmail().withMessage("Invalid email"),
+    body("password")
+      .isLength({ min: 6 })
+      .withMessage("Password must be at least 6 characters"),
+  ],
+  userController.loginUser
 );
 
-router.get('/profile',authMiddleware.authUser,userController.getUserProfile)
+//It ensures that only authenticated users can access their profile data by using middleware to handle authentication
+router.get("/profile", authMiddleware.authUser, userController.getUserProfile);
 
-router.get('/logout',authMiddleware.authUser,userController.logoutUser)
-
-
+//It ensures that only authenticated users can log out by using middleware to handle authentication
+router.get("/logout", authMiddleware.authUser, userController.logoutUser);
 
 module.exports = router;

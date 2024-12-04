@@ -147,3 +147,113 @@ The response will be a JSON object indicating the success or failure of the logo
   "message": "Logout successful"
 }
 ```
+
+
+# Captain Registration API
+
+This project provides an API to register captains, including their personal and vehicle details, and store the information securely in the database.
+
+---
+
+## **API Endpoint: Register a Captain**
+
+### **Route**
+`POST /register`
+
+---
+
+### **Description**
+This endpoint registers a new captain by validating and storing their details in the database.
+
+---
+
+### **Request Headers**
+| Header            | Value               | Required | Description                  |
+|--------------------|---------------------|----------|------------------------------|
+| `Content-Type`    | `application/json`  | Yes      | Specifies the request body format. |
+
+---
+
+### **Request Body**
+| Field                | Type     | Required | Description                                                      |
+|-----------------------|----------|----------|------------------------------------------------------------------|
+| `email`              | String   | Yes      | The email of the captain (must be a valid email format).         |
+| `fullname.firstname` | String   | Yes      | The first name of the captain (minimum 3 characters).            |
+| `fullname.lastname`  | String   | Yes      | The last name of the captain.                                    |
+| `password`           | String   | Yes      | The password for the captain (minimum 6 characters).             |
+| `vehicle.color`      | String   | Yes      | The color of the vehicle (minimum 3 characters).                 |
+| `vehicle.plate`      | String   | Yes      | The license plate of the vehicle (minimum 3 characters).         |
+| `vehicle.capacity`   | Number   | Yes      | The seating capacity of the vehicle (must be a valid number).    |
+| `vehicle.vehicleType`| Enum     | Yes      | The type of vehicle (`car`, `motorcycle`, or `auto`).            |
+
+#### **Request Body Example**
+```json
+{
+  "email": "captain@example.com",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "password": "securepassword",
+  "vehicle": {
+    "color": "Red",
+    "plate": "XYZ123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+### **Response**
+| Field      | Type     | Description                                      |
+|------------|----------|--------------------------------------------------|
+| `status`   | String   | Indicates the success or failure of the registration. |
+| `message`  | String   | Provides additional information about the registration status. |
+| `data`     | Object   | Contains captain details if registration is successful. |
+
+#### **Response Example**
+```json
+{
+  "status": "success",
+  "message": "Captain registered successfully",
+  "data": {
+    "id": "67890",
+    "email": "captain@example.com",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "vehicle": {
+      "color": "Red",
+      "plate": "XYZ123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
