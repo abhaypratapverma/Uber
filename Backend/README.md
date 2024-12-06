@@ -1,14 +1,17 @@
+
 # Backend API Documentation
 
-## User Registration Endpoint
+## User Endpoints
 
-**Method:** `POST`
+### User Registration Endpoint
 
-### Description
+**Method:** `POST /user/register`
+
+#### Description
 
 This endpoint allows new users to register by providing their first name, last name, email, and password. The password is securely hashed before storing it in the database.
 
-### Request Body
+#### Request Body
 
 The request body should be a JSON object with the following structure:
 
@@ -30,13 +33,10 @@ The request body should be a JSON object with the following structure:
   "password": "securePassword123"
 }
 ```
-### Response
 
-The response will be a JSON object with the following structure:
+#### Response
 
-- **status**: _String_, indicates the success or failure of the registration.
-- **message**: _String_, provides additional information about the registration status.
-- **data**: _Object_, contains user details if registration is successful.
+The response will be a JSON object:
 
 **Example:**
 
@@ -55,22 +55,18 @@ The response will be a JSON object with the following structure:
 }
 ```
 
-## User Login Endpoint
+---
 
-**Method:** `POST`
+### User Login Endpoint
 
-### Description
+**Method:** `POST /user/login`
 
-This endpoint allows existing users to log in by providing their email and password. If the credentials are valid, the user receives an authentication token.
+#### Description
 
-### Request Body
+Allows users to log in with their email and password. A token is generated upon successful login.
 
-The request body should be a JSON object with the following structure:
+#### Request Body
 
-- **email**: _String_, required, must be a valid email address.
-- **password**: _String_, required, minimum 6 characters.
-
-**Example:**
 ```json
 {
   "email": "john.doe@example.com",
@@ -78,15 +74,7 @@ The request body should be a JSON object with the following structure:
 }
 ```
 
-### Response
-
-The response will be a JSON object with the following structure:
-
-- **status**: _String_, indicates the success or failure of the login attempt.
-- **message**: _String_, provides additional information about the login status.
-- **token**: _String_, the authentication token if login is successful.
-
-**Example:**
+#### Response
 
 ```json
 {
@@ -96,23 +84,22 @@ The response will be a JSON object with the following structure:
 }
 ```
 
-## User Profile Endpoint
+---
 
-**Method:** `GET`
+### User Profile Endpoint
 
-### Description
+**Method:** `GET /user/profile`
 
-This endpoint allows authenticated users to retrieve their profile information.
+#### Description
 
-### Headers
+Retrieves the profile information of the authenticated user.
 
-- **Authorization**: _String_, required, Bearer token obtained after login.
+#### Headers
 
-### Response
+- **Authorization**: Bearer token.
 
-The response will be a JSON object containing the user's profile details.
+#### Response
 
-**Example:**
 ```json
 {
   "id": "12345",
@@ -124,23 +111,18 @@ The response will be a JSON object containing the user's profile details.
 }
 ```
 
-## User Logout Endpoint
+---
 
-**Method:** `POST`
+### User Logout Endpoint
 
-### Description
+**Method:** `POST /user/logout`
 
-This endpoint allows authenticated users to log out by invalidating their authentication token.
+#### Description
 
-### Headers
+Logs out the user by invalidating their authentication token.
 
-- **Authorization**: _String_, required, Bearer token obtained after login.
+#### Response
 
-### Response
-
-The response will be a JSON object indicating the success or failure of the logout attempt.
-
-**Example:**
 ```json
 {
   "status": "success",
@@ -148,45 +130,20 @@ The response will be a JSON object indicating the success or failure of the logo
 }
 ```
 
-
-# Captain Registration API
-
-This project provides an API to register captains, including their personal and vehicle details, and store the information securely in the database.
-
 ---
 
-## **API Endpoint: Register a Captain**
+## Captain Endpoints
 
-### **Route**
-`POST /register`
+### Captain Registration Endpoint
 
----
+**Method:** `POST /captain/register`
 
-### **Description**
-This endpoint registers a new captain by validating and storing their details in the database.
+#### Description
 
----
+Registers a new captain with their details.
 
-### **Request Headers**
-| Header            | Value               | Required | Description                  |
-|--------------------|---------------------|----------|------------------------------|
-| `Content-Type`    | `application/json`  | Yes      | Specifies the request body format. |
+#### Request Body
 
----
-
-### **Request Body**
-| Field                | Type     | Required | Description                                                      |
-|-----------------------|----------|----------|------------------------------------------------------------------|
-| `email`              | String   | Yes      | The email of the captain (must be a valid email format).         |
-| `fullname.firstname` | String   | Yes      | The first name of the captain (minimum 3 characters).            |
-| `fullname.lastname`  | String   | Yes      | The last name of the captain.                                    |
-| `password`           | String   | Yes      | The password for the captain (minimum 6 characters).             |
-| `vehicle.color`      | String   | Yes      | The color of the vehicle (minimum 3 characters).                 |
-| `vehicle.plate`      | String   | Yes      | The license plate of the vehicle (minimum 3 characters).         |
-| `vehicle.capacity`   | Number   | Yes      | The seating capacity of the vehicle (must be a valid number).    |
-| `vehicle.vehicleType`| Enum     | Yes      | The type of vehicle (`car`, `motorcycle`, or `auto`).            |
-
-#### **Request Body Example**
 ```json
 {
   "email": "captain@example.com",
@@ -202,14 +159,10 @@ This endpoint registers a new captain by validating and storing their details in
     "vehicleType": "car"
   }
 }
-### **Response**
-| Field      | Type     | Description                                      |
-|------------|----------|--------------------------------------------------|
-| `status`   | String   | Indicates the success or failure of the registration. |
-| `message`  | String   | Provides additional information about the registration status. |
-| `data`     | Object   | Contains captain details if registration is successful. |
+```
 
-#### **Response Example**
+#### Response
+
 ```json
 {
   "status": "success",
@@ -231,29 +184,83 @@ This endpoint registers a new captain by validating and storing their details in
 }
 ```
 
+---
 
+### Captain Login Endpoint
 
+**Method:** `POST /captain/login`
 
+#### Description
 
+Allows a captain to log in with their email and password.
 
+#### Request Body
 
+```json
+{
+  "email": "captain@example.com",
+  "password": "securepassword"
+}
+```
 
+#### Response
 
+```json
+{
+  "status": "success",
+  "message": "Login successful",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
 
+---
 
+### Captain Profile Endpoint
 
+**Method:** `GET /captain/profile`
 
+#### Description
 
+Retrieves the profile information of the authenticated captain.
 
+#### Headers
 
+- **Authorization**: Bearer token.
 
+#### Response
 
+```json
+{
+  "id": "67890",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "captain@example.com",
+  "vehicle": {
+    "color": "Red",
+    "plate": "XYZ123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
 
+---
 
+### Captain Logout Endpoint
 
+**Method:** `POST /captain/logout`
 
+#### Description
 
+Logs out the captain by invalidating their authentication token.
 
+#### Response
 
-
-
+```json
+{
+  "status": "success",
+  "message": "Logout successful"
+}
+```
