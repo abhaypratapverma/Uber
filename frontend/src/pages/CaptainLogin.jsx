@@ -1,14 +1,31 @@
 import React, { useState } from "react"; // Import useState hook
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { CaptainDataContext } from "../context/captainContext";
 const CaptainLogin = () => {
+  const navigate = useNavigate(); // Corrected to useNavigate hook
   const [email, setEmail] = useState(""); // Use setEmail instead of setemail
   const [password, setPassword] = useState(""); // Use setPassword instead of setpassword
-  const [captainData, setcaptainData] = useState({});
-  const submitHandler = (e) => {
+  // const [captainData, setcaptainData] = useState({});
+  const { setCaptain } = React.useContext(CaptainDataContext);
+  const submitHandler = async (e) => {
     e.preventDefault();
-    setcaptainData({ email: email, password: password });
-    console.log(captainData);
+    const captain = { email: email, password: password };
+
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/captains/login`,
+      captain
+    );
+
+    if (response.status === 200) {  
+      // Save captain data to context
+      const data = response.data;
+      setCaptain(data.captain); // Corrected setcaptainData usage
+      localStorage.setItem("token", data.token);
+      navigate("/captain-home");
+    }
+
     setEmail("");
     setPassword("");
   };
@@ -48,12 +65,11 @@ const CaptainLogin = () => {
           </button>
         </form>
         <p className="text-center">
-  join a fleet?
-  <Link to="/Captain-signup" className="text-blue-500 ml-2">
-    Register as a Captain
-  </Link>
-</p>
-
+          join a fleet?
+          <Link to="/Captain-signup" className="text-blue-500 ml-2">
+            Register as a Captain
+          </Link>
+        </p>
       </div>
       <div>
         <Link
